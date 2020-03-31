@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.CreationMenu">
+    <headerText>
+        Fill in all the information to begin the game
+    </headerText>
+    <content>
+        <BorderPane fx:id="borderPane">
+            <center>
+                <!--Section to create map?-->
+                <VBox fx:id="mapCreationBox">
+                    <Label fx:id="fightersText" text="Choose shape of arena" />
+                    <ChoiceBox fx:id="choiceBox" onAction="#setMapSize" prefWidth="150.0">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Square" />
+                                <String fx:value="Rectangle" />
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+                    <Label fx:id="chooseSize" text="Choose size" />
+                    <Label fx:id="chooseLength" text="Length:" />
+                    <Spinner fx:id="row" editable="true">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory max="10" min="5" />
+                        </valueFactory>
+                    </Spinner>
+                    <Label fx:id="width" text="Width:" visible="false" />
+                    <Spinner fx:id="col" editable="true" visible="false">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory max="10" min="5" />
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="Choose How Many Fighters You Would Like" />
+                    <Slider fx:id="fighterQty" />
+                </VBox>
+            </center>
+            <!--Section to create fighters?-->
+            <top>
+                <VBox fx:id="fighterCreationBox" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="7">
+                    <Label text="Choose type of fighter:" />
+                    <ChoiceBox fx:id="fighterChoiceBox">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Archer" />
+                                <String fx:value="Tank" />
+                                <String fx:value="Knight" />
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+                    <Label fx:id="setFighterName" text="Set name of player number one:" />
+                    <TextField fx:id="playerTypeName" onAction="#nextFighter" />
+                </VBox>
+            </top>
+
+            <bottom>
+                <HBox>
+                    <Button fx:id="previousButton" disable="true" onAction="#previousFighter" text="Previous" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+                    <Button fx:id="continueButton" disable="true" onAction="#saveInfo" text="Continue" GridPane.rowIndex="9" />
+                    <Region prefHeight="25.0" prefWidth="278.0" HBox.hgrow="ALWAYS" />
+                    <Button fx:id="nextButton" disable="true" onAction="#nextFighter" text="Next" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                    <Button fx:id="finishButton" onAction="#closeOut" text="Finish" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="9" />
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </content>
+</DialogPane>

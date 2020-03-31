@@ -1,0 +1,18 @@
+.button{
+   -fx-pref-width: 100;
+   -fx-font-size: 12px;
+}
+.circle{
+ -fx-fill: blue;
+ -fx-stroke: black;
+ -fx-stroke-type: inside;
+}
+.slider{
+ -fx-orientation: horizontal;
+ -fx-show-tick-labels: true;
+ -fx-show-tick-marks: true;
+ -fx-major-tick-unit: 1.0;
+ -fx-minor-tick-count: 0.0;
+ -fx-snap-to-ticks: true;
+ -fx-block-increment: 1;
+}
