@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,10 +110,6 @@ public class CreationMenu {
     private void nextFighter() {
         if (nextButton.disableProperty().get())
             return;
-        if (fighterQty.getValue() - 1 == fighterNum) {
-            finishButton.setVisible(true);
-            switchVisibilities();
-        }
 
         String name, type;
         name = playerTypeName.getText();
@@ -127,6 +124,12 @@ public class CreationMenu {
         oldName = null;
 
         previousButton.setDisable(false);
+
+        if (fighterQty.getValue() - 1 == fighterNum) {
+            finishButton.setVisible(true);
+            switchVisibilities();
+            return;
+        }
 
         fighterNum++;
         name = fightersNames.get(fighterNum);
@@ -201,6 +204,7 @@ public class CreationMenu {
 
     @FXML
     void closeOut() {
-
+        Stage stage = (Stage) finishButton.getScene().getWindow();
+        stage.close();
     }
 }

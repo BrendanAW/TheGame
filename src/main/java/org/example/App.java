@@ -19,11 +19,16 @@ public class App extends Application {
         try {
             loader = new FXMLLoader(getClass().getResource("primary.fxml"));
             root = loader.load();
+            MainController mainController = loader.getController();
+            mainController.setStageListener(stage);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         stage.setTitle("The Game");
         stage.setScene(new Scene(root, 800, 700));
+        stage.setMaximized(true);
+        stage.setMinHeight(960);
+        stage.setMinWidth(1180);
         stage.show();
     }
 

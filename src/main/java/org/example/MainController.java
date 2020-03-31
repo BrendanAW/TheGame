@@ -6,12 +6,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.*;
 
 import static org.example.Dialogue.CREATION_TITLE;
-import static org.example.Dialogue.FIGHTERS;
 
 public class MainController {
     @FXML
@@ -27,22 +27,22 @@ public class MainController {
     @FXML
     Button submit;
     Map<String, String> theMap;
-    final String SQUARE = "square";
-    final String RECTANGLE = "rectangle";
     int turn = 0;
-    int rows, cols;
-    Slider fightersAmount;
+    int greatestSize = 0;
     List<String> moveButts = Arrays.asList("Up", "Right", "Down", "Left");
     List<String> actButts = Arrays.asList("Fight", "Nothing", "Sepuku", "Special");
 
     public void initialize() {
         hideAllButtons();
-
     }
 
     @FXML
     void open() {
         intro();
+
+        if (gridMap.getChildren().size() > 1) {
+
+        }
     }
 
     void intro() {
@@ -61,19 +61,9 @@ public class MainController {
         CreationMenu controller = loader.getController();
 
         Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            buildDataMap(controller.getW(),controller.getH());
+        if (FighterController.getInstance().dataMap.size() > 0) {
+            buildDataMap(controller.getW(), controller.getH());
         }
-    }
-
-    void createFighters() {
-        textToPlayer.setText(FIGHTERS);
-        fightersAmount = new Slider();
-        fightersAmount.setMin(2.0);
-        fightersAmount.setMax(4.0);
-        gameController.add(fightersAmount, 3, 0);
-        togglePlayerInput();
-        textToComputer.setVisible(false);
     }
 
     void toggleControllerButtons(List<String> tempButts) {
@@ -81,7 +71,7 @@ public class MainController {
             if (b instanceof Button) {
                 tempButts.forEach(s -> {
                     if (((Button) b).getText().equalsIgnoreCase(s)) {
-                        b.setVisible(!b.visibleProperty().get());
+                        b.setDisable(!b.disableProperty().get());
                     }
                 });
             }
@@ -97,6 +87,7 @@ public class MainController {
 
     public void buildDataMap(int w, int h) {
         theMap = new HashMap<>();
+        greatestSize = Math.max(w, h);
         for (int i = 0; i < h; i++)
             for (int j = 0; j < w; j++) {
                 String temp = i + "," + j;
@@ -112,17 +103,16 @@ public class MainController {
             int x = Integer.parseInt(coordinates[1]);
             if (s2.equalsIgnoreCase("x")) {
                 Circle tempCircle = new Circle();
-                tempCircle.setCenterX(100);
-                tempCircle.setCenterY(100);
                 tempCircle.setRadius(50);
                 tempCircle.getStyleClass().add("circle");
                 gridMap.add(tempCircle, y, x);
             }
         });
+        changeSizes(1, 1);
     }
 
     void hideAllButtons() {
-        gameController.getChildren().forEach(node -> node.setVisible(false));
+        gameController.getChildren().forEach(node -> node.setDisable(true));
     }
 
     void togglePlayerInput() {
@@ -135,23 +125,31 @@ public class MainController {
         textToComputer.setText("");
     }
 
-    @FXML
-    void sendToComputer() {
-        String s = textToComputer.getText();
-        if (s.equalsIgnoreCase(SQUARE) || s.equalsIgnoreCase(RECTANGLE)) {
-            togglePlayerInput();
-            switch (turn) {
-                case 0:
-                    turn++;
-                    createFighters();
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            String temp = textToPlayer.getText();
-            textToPlayer.setText("");
-            textToPlayer.setText(temp + "\nPlease enter a valid response");
+    void setStageListener(Stage stage) {
+        stage.widthProperty().addListener((obs, number, t1) -> changeSizes((double) number, (double) t1));
+        stage.heightProperty().addListener((obs, number, t1) -> System.out.println(number));
+
+
+    }
+
+    private void changeSizes(double newValue, double oldValue) {
+        var scale = oldValue / newValue;
+        var x = greatestSize;
+        double temp = 0;
+        var size = 90;
+        for (int i = 5; i <= 10; i++) {
+            if (x == i) {
+                temp = size * scale;
+                break;
+            } else
+                size -= 10;
         }
+        if (temp > size)
+            temp = size;
+        var radius = temp;
+        gridMap.getChildren().forEach(node -> {
+            if (node instanceof Circle)
+                ((Circle) node).setRadius(radius);
+        });
     }
 }
